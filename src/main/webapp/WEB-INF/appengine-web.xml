@@ -20,4 +20,6 @@
       to asynchronously write HTTP session data to the datastore -->
   <async-session-persistence enabled="false" />
 
+  <public-root>/app/</public-root>
+
 </appengine-web-app>
