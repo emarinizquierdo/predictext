@@ -61,7 +61,7 @@ public class ThingService {
         LOGGER.info("la key es: " + id);
         // We get datastore user info and update language
         //We get datastore device info
-        List<Thing> things = ObjectifyService.ofy().load().type(Thing.class).filter("name >=", id).filter("name <", id + "\ufffd").list();
+        List<Thing> things = ObjectifyService.ofy().load().type(Thing.class).filter("name >=", id).filter("name <", id + "\ufffd").limit(10).list();
 
         BizResponse response = new BizResponse(things);
 
