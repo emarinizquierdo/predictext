@@ -124,7 +124,7 @@
           <enableJarClasses>false</enableJarClasses>
           <version>${app.version}</version>
           <jvmFlags>
-            <jvmFlag>-Ddatastore.backing_store=/home/emarin/workspace/temp/ds-maven.bin --clear_datastore=no</jvmFlag>
+            <jvmFlag>-Ddatastore.backing_store=/home/emarin/workspace/temp/predictext.bin</jvmFlag>
           </jvmFlags>
           <!-- Comment in the below snippet to bind to all IPs instead of just localhost -->
           <!-- address>0.0.0.0</address>

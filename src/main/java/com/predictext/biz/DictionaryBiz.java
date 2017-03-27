@@ -26,7 +26,6 @@ public class DictionaryBiz {
 
         }else {
 
-
             while (preprocessString.length() > 3) {
 
                 Dictionary dictionary = new Dictionary(preprocessString, linkedId);
