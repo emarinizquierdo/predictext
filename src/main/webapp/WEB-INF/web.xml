@@ -48,6 +48,15 @@
     <url-pattern>/import</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>importTask</servlet-name>
+    <servlet-class>com.predictext.servlets.ImportTask</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>importTask</servlet-name>
+    <url-pattern>/tasks/import</url-pattern>
+  </servlet-mapping>
+
   <listener>
     <listener-class>com.predictext.beans.OfyHelper</listener-class>
   </listener>

@@ -1,5 +1,6 @@
 package com.predictext.services;
 
+import com.predictext.beans.Dictionary;
 import com.predictext.beans.Thing;
 import com.predictext.biz.BizResponse;
 import com.predictext.constants.Params;
@@ -14,6 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
+
 
 /**
  * Created by edu on 5/03/16.
@@ -58,15 +60,17 @@ public class ThingService {
 
         LOGGER.info("response");
 
+        String query = ( id != null ? id.toLowerCase() : "").trim();
+
         LOGGER.info("la key es: " + id);
         // We get datastore user info and update language
         //We get datastore device info
-        List<Thing> things = ObjectifyService.ofy().load().type(Thing.class).filter("name >=", id).filter("name <", id + "\ufffd").limit(10).list();
+        List<Dictionary> dictionaries = ObjectifyService.ofy().load().group(Thing.class).type(Dictionary.class).filter("word >=", query).filter("word <", query + "\ufffd").limit(10).list();
 
-        BizResponse response = new BizResponse(things);
+        BizResponse response = new BizResponse(dictionaries);
 
         //return Response.ok().entity(response.toJsonExcludeFieldsWithoutExposeAnnotation()).build();
-        return Response.ok().entity(response.toJson()).build();
+        return Response.ok().entity(response.toJsonExcludeFieldsWithoutExposeAnnotation()).build();
     }
 
     @POST

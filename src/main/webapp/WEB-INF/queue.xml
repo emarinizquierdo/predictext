@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queue-entries>
+    <!-- Import queue -->
+    <queue>
+        <name>import</name>
+        <rate>10/s</rate>
+        <bucket-size>20</bucket-size>
+        <max-concurrent-requests>20</max-concurrent-requests>
+        <retry-parameters>
+            <task-retry-limit>0</task-retry-limit>
+        </retry-parameters>
+    </queue>
+</queue-entries>

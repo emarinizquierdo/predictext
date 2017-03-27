@@ -1,6 +1,8 @@
 package com.predictext.servlets;
 
 
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.predictext.beans.Thing;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -11,6 +13,7 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.*;
 import com.googlecode.objectify.ObjectifyService;
+import com.predictext.biz.DictionaryBiz;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -38,6 +41,7 @@ public class ReadSpreadsheet extends HttpServlet {
     private final List<String> SCOPES = Arrays
             .asList(SheetsScopes.SPREADSHEETS);
 
+    private static final DictionaryBiz DICTIONARY_BIZ = new DictionaryBiz();
     /**
      * Creates an authorized Credential object.
      * @return an authorized Credential object.
@@ -77,7 +81,7 @@ public class ReadSpreadsheet extends HttpServlet {
                 .build();
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // Build a new authorized API client service.
 
         try {
@@ -96,9 +100,10 @@ public class ReadSpreadsheet extends HttpServlet {
             List<List<Object>> rows = sheetResponse.getValues();
 
             for(List<Object> row : rows){
-                LOGGER.info("Fila: " + row.get(0) + ", " + row.get(1));
+
                 Thing thing = new Thing(row.get(0).toString(), row.get(1).toString());
-                ObjectifyService.ofy().save().entity(thing).now();
+                Key<Thing> thingKey = ObjectifyService.ofy().save().entity(thing).now();
+                DICTIONARY_BIZ.GenerateWords(row.get(0).toString(), thing);
 
             }
 

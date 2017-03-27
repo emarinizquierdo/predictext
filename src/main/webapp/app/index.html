@@ -29,8 +29,8 @@
 
 response($.map(data.data, function(v,i){
                         return {
-                            		label: v.name,
-                                    value: v.id
+                            		label: v.thing.name,
+                                    value: v.thing.id
                                    };
                     }));
 

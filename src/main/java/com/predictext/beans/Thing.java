@@ -1,5 +1,6 @@
 package com.predictext.beans;
 
+import com.google.gson.annotations.Expose;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.*;
 
@@ -22,16 +23,24 @@ import java.lang.String;
 public class Thing {
 
     @Id
+    @Expose
     public Long id;
 
     @Index
+    @Expose
     public String name;
 
     @Index
+    @Expose
     public String description;
 
+    @Expose
     public Boolean status;
+
+    @Expose
     public Double lat = 40.4165000;
+
+    @Expose
     public Double lng = -3.7025600;
 
     public Thing(){}
@@ -90,4 +99,5 @@ public class Thing {
     public void setLng(Double lng) {
         this.lng = lng;
     }
+
 }
