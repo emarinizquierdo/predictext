@@ -103,7 +103,7 @@ public class ReadSpreadsheet extends HttpServlet {
 
                 Thing thing = new Thing(row.get(0).toString(), row.get(1).toString());
                 Key<Thing> thingKey = ObjectifyService.ofy().save().entity(thing).now();
-                DICTIONARY_BIZ.GenerateWords(row.get(0).toString(), thing);
+                DICTIONARY_BIZ.createDocument(thing, row.get(0).toString());
 
             }
 
