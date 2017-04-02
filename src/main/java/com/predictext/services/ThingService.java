@@ -1,10 +1,16 @@
 package com.predictext.services;
 
+import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.Query;
+import com.google.appengine.api.search.Results;
+import com.google.appengine.api.search.ScoredDocument;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 import com.predictext.beans.Dictionary;
 import com.predictext.beans.Thing;
 import com.predictext.biz.BizResponse;
 import com.predictext.constants.Params;
-import com.googlecode.objectify.ObjectifyService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -13,8 +19,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
+
+import static com.predictext.biz.DictionaryBiz.getUserDocIndex;
 
 
 /**
@@ -60,14 +68,25 @@ public class ThingService {
 
         LOGGER.info("response");
 
-        String query = ( id != null ? id.toLowerCase() : "").trim();
+        String queryString = ( id != null ? id.toLowerCase() : "").trim();
+        List<Thing> things = new ArrayList<Thing>();
 
         LOGGER.info("la key es: " + id);
         // We get datastore user info and update language
         //We get datastore device info
-        List<Dictionary> dictionaries = ObjectifyService.ofy().load().group(Thing.class).type(Dictionary.class).filter("word >=", query).filter("word <", query + "\ufffd").limit(10).list();
+        Query query = Query.newBuilder().build("Display_Name" + "=" + queryString);
 
-        BizResponse response = new BizResponse(dictionaries);
+        Index userDocIndex = getUserDocIndex();
+        Results<ScoredDocument> matchingUsers = userDocIndex.search(query);
+
+        for(ScoredDocument scoredDocument : matchingUsers){
+            LOGGER.info("resultado: " + scoredDocument.getOnlyField("thingId").getText());
+            things.add(ObjectifyService.ofy().load().key(Key.create(Thing.class, Long.parseLong(scoredDocument.getOnlyField("thingId").getText()))).now());
+        }
+
+        //List<Dictionary> dictionaries = ObjectifyService.ofy().load().group(Thing.class).type(Dictionary.class).filter("word >=", query).filter("word <", query + "\ufffd").limit(10).list();
+
+        BizResponse response = new BizResponse(things);
 
         //return Response.ok().entity(response.toJsonExcludeFieldsWithoutExposeAnnotation()).build();
         return Response.ok().entity(response.toJsonExcludeFieldsWithoutExposeAnnotation()).build();
